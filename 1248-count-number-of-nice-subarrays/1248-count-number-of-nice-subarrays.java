@@ -1,27 +1,23 @@
 class Solution {
+
     public int numberOfSubarrays(int[] nums, int k) {
-        int n=nums.length;
-        int l=0,r=0,oddcount=0;
-        int totalCount=0;
-        int temp=0;
-        
-        while(r<n){
-            if(nums[r]%2 == 1){
-                oddcount++;
-                temp=0;
+        return atMost(nums, k) - atMost(nums, k - 1);
+    }
+
+    private int atMost(int[] nums, int k) {
+        int windowSize = 0, subarrays = 0, start = 0;
+
+        for (int end = 0; end < nums.length; end++) {
+            windowSize += nums[end] % 2;
+            // Find the first index start where the window has exactly k odd elements.
+            while (windowSize > k) {
+                windowSize -= nums[start] % 2;
+                start++;
             }
-        
-            while(oddcount==k){
-                temp++;
-                if(nums[l]%2 ==1){
-                        oddcount--;
-                }
-                l++;
-            }
-            totalCount += temp;
-            r++;
-            
+            // Increment number of subarrays with end - start + 1.
+            subarrays += end - start + 1;
         }
-        return totalCount;
+
+        return subarrays;
     }
 }
